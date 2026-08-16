@@ -1,0 +1,17 @@
+captured_launch=CLAUDE_CONFIG_DIR='/opt/test/claude-work' env -u CURSOR_AGENT -u CURSOR_INVOKED_AS $(if [ "$(id -u)" -eq 0 ]; then printf %s IS_SANDBOX=1; fi) CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION=false claude --dangerously-skip-permissions --model 'sonnet' --effort 'high' "$('/root/.no-mistakes/worktrees/5f0e0f184814/01M04AZHY60060QZAGZ8Q3ANSX/bin/fm-operational-input.sh' encode launch-brief < '/tmp/fm-claude-root-marker-evidence.LVvhMT/ship/home/data/evidence-claude-root/brief.md')"
+
+worker_uid=0 observed_by_fake_claude
+IS_SANDBOX=1
+CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION=false
+CLAUDE_CONFIG_DIR=/opt/test/claude-work
+CURSOR_AGENT=__unset__
+CURSOR_INVOKED_AS=__unset__
+argv:<--dangerously-skip-permissions><--model><sonnet><--effort><high><⁣FIRSTMATE_OP: v1 launch-brief: root marker evidence brief>
+
+worker_uid=1000 observed_by_fake_claude
+IS_SANDBOX=__unset__
+CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION=false
+CLAUDE_CONFIG_DIR=/opt/test/claude-work
+CURSOR_AGENT=__unset__
+CURSOR_INVOKED_AS=__unset__
+argv:<--dangerously-skip-permissions><--model><sonnet><--effort><high><⁣FIRSTMATE_OP: v1 launch-brief: root marker evidence brief>

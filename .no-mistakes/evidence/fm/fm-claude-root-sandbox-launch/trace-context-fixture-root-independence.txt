@@ -1,0 +1,3 @@
+runner_uid=0
+append_after_chmod_a_w=success
+append_to_directory_meta_path=failure
