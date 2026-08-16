@@ -1,0 +1,985 @@
+<title>So in Love at the Piano</title>
+
+<style>
+  :root {
+    color-scheme: light dark;
+
+    --ground:      #F3F0F6;
+    --surface:     #FFFFFF;
+    --surface-2:   #E9E4EF;
+    --line:        #D5CEDE;
+    --line-soft:   #E4DEEB;
+    --text:        #221C2E;
+    --text-dim:    #635B72;
+    --text-faint:  #8A8299;
+    --brass:       #8A6412;
+    --brass-soft:  #F0E3C4;
+    --rose:        #A8455A;
+    --rose-soft:   #F4DDE1;
+    --key-white:   #FFFFFF;
+    --key-black:   #2A2436;
+    --key-edge:    #B9B1C6;
+    --shadow:      0 1px 2px rgba(34,28,46,.06), 0 8px 24px -12px rgba(34,28,46,.18);
+
+    --f-display: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+    --f-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --f-data: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --measure: 66ch;
+    --rail: 4.5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:     #15121C;
+      --surface:    #1E1929;
+      --surface-2:  #282136;
+      --line:       #3A3049;
+      --line-soft:  #2C2539;
+      --text:       #EDE7F3;
+      --text-dim:   #A79FB8;
+      --text-faint: #7C7489;
+      --brass:      #DCAE55;
+      --brass-soft: #3A2E18;
+      --rose:       #D8919B;
+      --rose-soft:  #3A222A;
+      --key-white:  #CFC8D8;
+      --key-black:  #1A1522;
+      --key-edge:   #4A4059;
+      --shadow:     0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:     #15121C;
+    --surface:    #1E1929;
+    --surface-2:  #282136;
+    --line:       #3A3049;
+    --line-soft:  #2C2539;
+    --text:       #EDE7F3;
+    --text-dim:   #A79FB8;
+    --text-faint: #7C7489;
+    --brass:      #DCAE55;
+    --brass-soft: #3A2E18;
+    --rose:       #D8919B;
+    --rose-soft:  #3A222A;
+    --key-white:  #CFC8D8;
+    --key-black:  #1A1522;
+    --key-edge:   #4A4059;
+    --shadow:     0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--f-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .mast {
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .eyebrow {
+    font-family: var(--f-data);
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin: 0;
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 7vw, 4.4rem);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: var(--rose); }
+  .standfirst {
+    font-family: var(--f-display);
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    line-height: 1.55;
+    color: var(--text-dim);
+    max-width: 46ch;
+    margin: 0;
+  }
+  .credit {
+    font-family: var(--f-data);
+    font-size: .76rem;
+    letter-spacing: .06em;
+    color: var(--text-faint);
+    margin: 0;
+  }
+
+  /* ---------- facts strip ---------- */
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin: 3rem 0 0;
+  }
+  .fact { background: var(--surface); padding: 1rem 1.1rem; }
+  .fact dt {
+    font-family: var(--f-data);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 .35rem;
+  }
+  .fact dd {
+    margin: 0;
+    font-family: var(--f-display);
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  /* ---------- sections ---------- */
+
+  section { padding: 4rem 0 0; }
+
+  .head {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+    gap: 1.25rem;
+    align-items: baseline;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+  .mark {
+    font-family: var(--f-data);
+    font-size: .7rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--brass);
+    padding-top: .5rem;
+  }
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 3.6vw, 2.4rem);
+    line-height: 1.15;
+    letter-spacing: -.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: 1.3rem;
+    line-height: 1.3;
+    margin: 2.25rem 0 .5rem;
+  }
+  h4 {
+    font-family: var(--f-data);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-weight: 600;
+    margin: 1.75rem 0 .6rem;
+  }
+
+  .body { max-width: var(--measure); }
+  .body p { margin: 0 0 1.1rem; }
+  .body ul, .body ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  .body li { margin-bottom: .5rem; }
+  .indent { margin-left: calc(var(--rail) + 1.25rem); }
+  @media (max-width: 46rem) { .indent { margin-left: 0; } .head { grid-template-columns: 1fr; gap: .25rem; } }
+
+  strong { font-weight: 650; }
+  em.term { font-style: normal; color: var(--rose); font-weight: 600; }
+  .n { font-family: var(--f-data); font-size: .92em; color: var(--brass); }
+
+  a { color: var(--rose); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+  /* ---------- callout ---------- */
+
+  .note {
+    border-left: 2px solid var(--brass);
+    background: var(--surface);
+    padding: 1rem 1.2rem;
+    margin: 0 0 1.4rem;
+    max-width: var(--measure);
+  }
+  .note p { margin: 0 0 .6rem; font-size: .94rem; color: var(--text-dim); }
+  .note p:last-child { margin: 0; }
+  .note b { color: var(--text); }
+
+  /* ---------- chord cards ---------- */
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: 1rem 1.1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+  }
+  .card-top { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; }
+  .chordname {
+    font-family: var(--f-display);
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: -.01em;
+  }
+  .fn {
+    font-family: var(--f-data);
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-align: right;
+  }
+  .hands {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem .9rem;
+    font-family: var(--f-data);
+    font-size: .78rem;
+  }
+  .hand { display: flex; align-items: center; gap: .4rem; }
+  .swatch { width: .6rem; height: .6rem; border-radius: 50%; flex: none; }
+  .sw-l { background: var(--brass); }
+  .sw-r { background: var(--rose); }
+  .hand span { color: var(--text-dim); }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text);
+    padding: .4rem .85rem;
+    font-family: var(--f-data);
+    font-size: .74rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  button:hover { border-color: var(--brass); color: var(--brass); }
+  button:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
+  button[aria-pressed="true"] { background: var(--brass); border-color: var(--brass); color: var(--ground); }
+
+  .kb { display: block; width: 100%; height: auto; }
+  .kb .w { fill: var(--key-white); stroke: var(--key-edge); stroke-width: 1; }
+  .kb .b { fill: var(--key-black); stroke: var(--key-edge); stroke-width: 1; }
+  .kb .w.l, .kb .b.l { fill: var(--brass); }
+  .kb .w.r, .kb .b.r { fill: var(--rose); }
+  .kb .lbl { font-family: var(--f-data); font-size: 7px; fill: var(--text-faint); }
+  .kb rect { transition: fill .12s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .kb rect, button { transition: none; }
+  }
+
+  /* ---------- the line demo ---------- */
+
+  .demo {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .demo-kb { max-width: 34rem; margin: 0 auto; width: 100%; }
+  .steps { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .step {
+    font-family: var(--f-display);
+    font-size: 1.05rem;
+    border: 1px solid var(--line);
+    padding: .45rem .8rem;
+    background: transparent;
+    color: var(--text);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .step.on { background: var(--rose-soft); border-color: var(--rose); color: var(--rose); }
+  .demo-caption { font-size: .9rem; color: var(--text-dim); margin: 0; min-height: 2.6em; }
+
+  /* ---------- chart ---------- */
+
+  .chart-scroll { overflow-x: auto; margin: 1.25rem 0 0; }
+  .chart { min-width: 34rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .strain { display: grid; grid-template-columns: var(--rail) 1fr; gap: 1.25rem; align-items: start; }
+  .strain-mark {
+    font-family: var(--f-display);
+    font-size: 1.6rem;
+    color: var(--brass);
+    line-height: 1;
+    padding-top: .35rem;
+  }
+  .strain-mark small {
+    display: block;
+    font-family: var(--f-data);
+    font-size: .6rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-top: .3rem;
+  }
+  .bars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--text-dim);
+    background: var(--surface);
+  }
+  .bar {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: .7rem .8rem .8rem;
+    min-height: 4.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    text-align: left;
+    align-items: flex-start;
+    text-transform: none;
+    letter-spacing: 0;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 1rem;
+  }
+  .bar:hover { background: var(--surface-2); color: var(--text); }
+  .bar:nth-child(4n) { border-right: 1px solid var(--text-dim); }
+  .bar:nth-last-child(-n+4) { border-bottom: none; }
+  .bar-no {
+    font-family: var(--f-data);
+    font-size: .62rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .bar-ch { font-family: var(--f-display); font-size: 1.2rem; line-height: 1.15; }
+  .bar-ch .split { font-size: .95rem; color: var(--text-dim); display: block; }
+  .bar.turn .bar-ch { color: var(--rose); }
+  .bar.home { background: linear-gradient(180deg, var(--brass-soft), var(--surface) 70%); }
+
+  /* ---------- practice plan ---------- */
+
+  .plan { border-top: 1px solid var(--line); margin: 1.25rem 0 0; max-width: 52rem; }
+  .day {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 1.25rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .day-no {
+    font-family: var(--f-data);
+    font-size: .7rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--brass);
+    padding-top: .3rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .day h5 { font-family: var(--f-display); font-weight: 400; font-size: 1.15rem; margin: 0 0 .3rem; }
+  .day p { margin: 0; font-size: .95rem; color: var(--text-dim); }
+
+  /* ---------- metronome ---------- */
+
+  .metro {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    margin: 3rem 0 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: .85rem 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .9rem 1.2rem;
+  }
+  .metro label {
+    font-family: var(--f-data);
+    font-size: .7rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .bpm {
+    font-family: var(--f-display);
+    font-size: 1.5rem;
+    font-variant-numeric: tabular-nums;
+    min-width: 3.2ch;
+  }
+  input[type="range"] { accent-color: var(--rose); flex: 1 1 8rem; min-width: 7rem; }
+  .beats { display: flex; gap: .35rem; }
+  .beat { width: .55rem; height: .55rem; border-radius: 50%; background: var(--line); }
+  .beat.on { background: var(--rose); }
+
+  /* ---------- listening ---------- */
+
+  .listen { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 1.25rem; }
+  .listen div { background: var(--surface); padding: .9rem 1rem; }
+  .listen b { display: block; font-family: var(--f-display); font-size: 1.1rem; font-weight: 400; }
+  .listen span { font-size: .85rem; color: var(--text-dim); }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    font-size: .85rem;
+    color: var(--text-faint);
+    max-width: var(--measure);
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">A play-along guide</p>
+    <h1>So in Love<br><em>at the piano</em></h1>
+    <p class="standfirst">Cole Porter wrote a torch song that hangs on one falling note. Learn that, and most of the tune is already under your hands.</p>
+    <p class="credit">Music &amp; lyrics by Cole Porter · <i>Kiss Me, Kate</i>, 1948 · arranged here for small hands and small keyboards</p>
+  </header>
+
+  <dl class="facts">
+    <div class="fact"><dt>Key</dt><dd>F minor</dd></div>
+    <div class="fact"><dt>Form</dt><dd>32 bars</dd></div>
+    <div class="fact"><dt>Metre</dt><dd>4/4, slow</dd></div>
+    <div class="fact"><dt>Tempo</dt><dd>66–76</dd></div>
+    <div class="fact"><dt>Range needed</dt><dd>C3 – E5</dd></div>
+  </dl>
+
+  <section>
+    <div class="head">
+      <div class="mark">Start here</div>
+      <h2>What this teaches, and what it doesn't</h2>
+    </div>
+    <div class="body indent">
+      <p>This is a guide to <strong>playing the song</strong> — the harmony, the voicings, the left hand, and a week of practice that gets you from cold to playing it through. It is not a transcription. The tune is still in copyright, so the melody and lyrics aren't printed here; buy the sheet music if you want them on the page, or do what jazz and cabaret players actually do and put the melody on top by ear, which the last section walks you through.</p>
+      <p>That order is not a compromise. Every good player of this repertoire learns the changes first and the tune second, because the changes are what let you accompany a singer, play it in another key, stretch the time, or stop mid-phrase without falling apart.</p>
+      <div class="note">
+        <p><b>On the harmony below.</b> Published editions of this song differ — the 1948 show score, vocal editions, and jazz fake books all voice it slightly differently. What follows is a <b>playable reduction</b>: it keeps the two harmonic devices the song is actually built on, and simplifies the rest so it fits two octaves and a modest hand. If you buy a lead sheet, expect small differences, and trust the printed one.</p>
+      </div>
+      <h4>Everything fits here</h4>
+      <p>The whole arrangement lives between <span class="n">C3</span> and <span class="n">E5</span> — a bit under two and a half octaves. Left hand stays in the octave below middle C; right hand sits from middle C upward. If your keyboard is 49 keys or more, you have room. If it's smaller, transpose the whole thing up or down an octave; nothing here depends on absolute pitch.</p>
+      <p>Throughout, <span class="n" style="color:var(--brass)">gold</span> keys are the left hand and <span class="n" style="color:var(--rose)">rose</span> keys are the right. Press <b>Play</b> on any diagram to hear it.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <div class="mark">Lesson 1</div>
+      <h2>The falling line</h2>
+    </div>
+    <div class="body indent">
+      <p>Hold an F minor chord. Now move exactly one note inside it downward, one key at a time: <span class="n">F → E → E♭ → D</span>. The chord stays F minor the whole way; only that single voice slides. Four chords, four bars, one moving finger.</p>
+      <p>Musicians call this a <em class="term">line cliché</em>, which undersells it badly. It is the sound of something beautiful quietly coming apart, and Porter opens the song with it, returns to it, and closes on it. If you only ever learn one thing from this page, learn these four bars — they are more than half of the song's total material.</p>
+    </div>
+
+    <div class="demo indent" style="margin-top:1.5rem">
+      <div class="steps" id="lineSteps"></div>
+      <div class="demo-kb"><svg class="kb" id="lineKb" viewBox="0 0 340 92" role="img" aria-label="Keyboard diagram showing the falling inner line"></svg></div>
+      <p class="demo-caption" id="lineCaption">Left hand holds low F. Right hand: thumb on F, fingers 2 and 5 on A♭ and C. Only the thumb moves.</p>
+      <div class="steps">
+        <button id="linePlay">Play the line</button>
+      </div>
+    </div>
+
+    <div class="body indent" style="margin-top:1.5rem">
+      <h4>Fingering</h4>
+      <p>Right hand: thumb (1) on the moving note, finger 2 on A♭, finger 5 on C. Set that shape once and don't reset it — the thumb walks down four white-and-black keys while 2 and 5 stay planted. Left hand plays a single low F and holds it, or re-strikes it softly on each bar.</p>
+      <p><strong>Small hands:</strong> if F–up-to-C is a reach, drop the top C and play just two notes in the right hand. The line still reads perfectly.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <div class="mark">Lesson 2</div>
+      <h2>Your ten chords</h2>
+    </div>
+    <div class="body indent">
+      <p>The entire song runs on these. Each one is a single left-hand root plus three right-hand notes — no chord here needs more than a sixth in the right hand. The right-hand notes deliberately skip the root, which is why they sound like a record and not like a beginner's book.</p>
+      <p>Learn them in the three groups below, in order. Don't try to memorise all ten in a sitting.</p>
+    </div>
+
+    <h3 class="indent">Group 1 · Home (F minor and its falling line)</h3>
+    <div class="cards indent" id="grp1"></div>
+
+    <h3 class="indent">Group 2 · The turn toward the light</h3>
+    <div class="body indent"><p>These four take you out of F minor toward A♭ major — its relative major, the "warm" key hiding inside the sad one — and then <span class="n">C7</span> drags you back home. This is the second half of every A section.</p></div>
+    <div class="cards indent" id="grp2"></div>
+
+    <h3 class="indent">Group 3 · The bridge and the ending</h3>
+    <div class="body indent"><p>The bridge lifts to D♭ major, the flattened sixth — the classic "wide open sky" chord in a minor key. The ending is where Porter twists the knife: the last chord is F <em>major</em>. Same root, one note different, entirely different feeling.</p></div>
+    <div class="cards indent" id="grp3"></div>
+  </section>
+
+  <section>
+    <div class="head">
+      <div class="mark">The map</div>
+      <h2>Thirty-two bars</h2>
+    </div>
+    <div class="body indent">
+      <p>Four strains of eight bars. The first, second, and fourth are the same song; the third is the bridge. Notice how little there is to memorise once you see the repeats — bars 1–4, 9–12 and 25–28 are all the falling line, and bars 5–8, 13–16 and 21–24 are the same four chords.</p>
+      <p>Click any bar to hear it.</p>
+    </div>
+    <div class="chart-scroll indent">
+      <div class="chart" id="chart"></div>
+    </div>
+    <div class="body indent" style="margin-top:1.5rem">
+      <div class="note">
+        <p><b>Bar 30</b> is the only bar with three chords in it — B♭m, B♭m7, B♭m6, roughly a beat and a half each. It's the falling line again, transplanted onto the minor fourth chord, right before the final cadence. Porter is quoting himself as the song ends.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <div class="mark">Lesson 3</div>
+      <h2>What the left hand does</h2>
+    </div>
+    <div class="body indent">
+      <p>Three levels. Play level one until the chart is automatic, then upgrade. Rushing to level three before the changes are memorised is the single most common way people stall on this tune.</p>
+
+      <h4>Level 1 — one note, held</h4>
+      <p>Play the root on beat 1 and hold it for the whole bar. That's it. It sounds better than you expect, because the right hand is carrying real harmony. Use it for your first three or four days.</p>
+
+      <h4>Level 2 — root and fifth</h4>
+      <p>Root on beat 1, the fifth below it on beat 3. For F minor that's <span class="n">F3</span> then <span class="n">C3</span>. It gives the ballad a slow pulse without adding notes to think about. Keep the fifth quieter than the root.</p>
+
+      <h4>Level 3 — a spread ballad figure</h4>
+      <p>Roll <span class="n">root → fifth → root-an-octave-up</span> across the first two beats, then let it ring. On F minor: <span class="n">F3, C4, F4</span> — but move the right hand up an octave first so you aren't fighting for the same keys. This is the sound of the classic vocal accompaniment, and it wants a soft, unhurried touch, closer to a harp than a stride.</p>
+
+      <h4>Pedal</h4>
+      <p>One pedal change per chord, on the beat the chord arrives — press just <em>after</em> you strike, not with it, or the change smears. In bar 30, where three chords go by, change three times. If your keyboard has no sustain pedal, hold the left-hand note with your finger instead and let it sing.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <div class="mark">Lesson 4</div>
+      <h2>Putting the tune on top</h2>
+    </div>
+    <div class="body indent">
+      <p>Once the chart is in your hands, add the melody — and the honest way to learn it is with your ears, not with a page.</p>
+      <ol>
+        <li><strong>Listen until you can sing it.</strong> Properly sing it, unaccompanied, all thirty-two bars. If you can't, you're not ready to find it on the keys; go back to the recordings.</li>
+        <li><strong>Find the first note.</strong> Play your F minor chord, then hunt for the melody's opening pitch. It's inside that chord. Everything else follows from getting that one right.</li>
+        <li><strong>Work one strain at a time.</strong> Play the chord for the bar, sing the phrase, then find it. The melody sits mostly between <span class="n">C4</span> and <span class="n">F5</span>, and it moves in small steps far more than it leaps.</li>
+        <li><strong>Then rebalance your hands.</strong> Melody in the right hand's top finger, played louder than everything else. Move the three-note voicings down into the left hand, or split them between the two.</li>
+      </ol>
+      <p>This is slow the first time and much faster the second. It is also the skill that makes every future standard easier, which a printed page never gives you.</p>
+
+      <h4>If you'd rather read it</h4>
+      <p>Legitimate editions are easy to find. Look for the piano/vocal sheet from <a href="https://www.alfred.com/so-in-love/p/00-PS-0011020/">Alfred</a>, the <i>Kiss Me, Kate</i> vocal selections from Hal Leonard, or the lead sheet in the licensed <i>Real Book</i> (Hal Leonard's sixth edition onward). Buying it also means the exact published harmony, which is a little richer than the reduction above.</p>
+
+      <h4>Listen to these</h4>
+      <div class="listen">
+        <div><b>Ella Fitzgerald</b><span>Cole Porter Song Book, 1956 — the reference reading, unhurried and enormous.</span></div>
+        <div><b>Patricia Morison</b><span>Original 1948 cast — how it was written to be sung, in the theatre.</span></div>
+        <div><b>k.d. lang</b><span>Red Hot + Blue, 1990 — proof the song survives being taken somewhere else entirely.</span></div>
+        <div><b>Keith Jarrett Trio</b><span>For hearing what the changes can take once you're free with them.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <div class="mark">Seven days</div>
+      <h2>A practice plan</h2>
+    </div>
+    <div class="body indent">
+      <p>Twenty to thirty minutes a day. The order matters — each day depends on the one before it, so don't skip ahead even if a day feels easy.</p>
+    </div>
+    <div class="plan indent">
+      <div class="day"><div class="day-no">Day 1</div><div><h5>The falling line only</h5><p>Bars 1–4, hands together, left hand holding one note. Slowly, until the thumb walks down without you watching it. Nothing else today.</p></div></div>
+      <div class="day"><div class="day-no">Day 2</div><div><h5>Add the turn</h5><p>Learn Group 2 — B♭m7, E♭7, A♭maj7, C7 — as isolated shapes. Then play the full first eight bars, badly, at whatever speed lets you not stop.</p></div></div>
+      <div class="day"><div class="day-no">Day 3</div><div><h5>Sixteen bars</h5><p>A and A′ back to back. They're nearly identical, so this is mostly a memory day. Metronome at 60; the goal is not stopping, not sounding good.</p></div></div>
+      <div class="day"><div class="day-no">Day 4</div><div><h5>The bridge</h5><p>Bars 17–24. D♭maj7 and G♭maj7 are new shapes; give them ten minutes alone before joining them up. Then bars 1–24 straight through.</p></div></div>
+      <div class="day"><div class="day-no">Day 5</div><div><h5>The ending</h5><p>Bars 25–32, especially bar 30's three chords and the final F major. Play the last four bars twenty times. It's the moment people remember.</p></div></div>
+      <div class="day"><div class="day-no">Day 6</div><div><h5>All thirty-two, and the pedal</h5><p>Whole form, slowly, with pedal changes. Upgrade the left hand to level 2. Expect it to fall apart at the bridge — that's normal on day 6.</p></div></div>
+      <div class="day"><div class="day-no">Day 7</div><div><h5>Make it music</h5><p>Take the metronome off. Play it at the speed the song wants, which is slower than you think. Get quieter in the bridge, and let the last chord ring until it's gone. Then start finding the melody.</p></div></div>
+    </div>
+  </section>
+
+  <div class="metro">
+    <button id="metroBtn" aria-pressed="false">Metronome</button>
+    <div class="beats" id="beats"><i class="beat"></i><i class="beat"></i><i class="beat"></i><i class="beat"></i></div>
+    <label for="bpm">Tempo</label>
+    <input type="range" id="bpm" min="40" max="120" value="66" aria-label="Tempo in beats per minute">
+    <div class="bpm" id="bpmOut">66</div>
+  </div>
+
+  <footer>
+    <p>"So in Love" — music and lyrics by Cole Porter, from <i>Kiss Me, Kate</i> (1948). The song remains in copyright; no melody or lyrics are reproduced here. The chord reduction, voicings, fingerings and practice plan on this page are teaching material written for this guide.</p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- audio ---------------- */
+
+  var ac = null;
+  function ctx() {
+    if (!ac) {
+      var C = window.AudioContext || window.webkitAudioContext;
+      if (!C) return null;
+      ac = new C();
+    }
+    if (ac.state === "suspended") ac.resume();
+    return ac;
+  }
+  function freq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+  function play(midis, dur, delay) {
+    var a = ctx();
+    if (!a) return;
+    dur = dur || 2.2;
+    var t = a.currentTime + (delay || 0);
+    var bus = a.createGain();
+    var lp = a.createBiquadFilter();
+    lp.type = "lowpass";
+    lp.frequency.setValueAtTime(3000, t);
+    lp.frequency.exponentialRampToValueAtTime(900, t + dur);
+    bus.connect(lp);
+    lp.connect(a.destination);
+    bus.gain.setValueAtTime(0.0001, t);
+    bus.gain.linearRampToValueAtTime(0.15, t + 0.015);
+    bus.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    midis.forEach(function (m, i) {
+      var stagger = t + i * 0.014;
+      [[0, "triangle", 0.5], [1200, "sine", 0.14]].forEach(function (v) {
+        var o = a.createOscillator();
+        var g = a.createGain();
+        o.type = v[1];
+        o.frequency.value = freq(m) * (v[0] ? 2 : 1);
+        g.gain.value = v[2];
+        o.connect(g);
+        g.connect(bus);
+        o.start(stagger);
+        o.stop(t + dur + 0.1);
+      });
+    });
+  }
+
+  function click(accent) {
+    var a = ctx();
+    if (!a) return;
+    var t = a.currentTime;
+    var o = a.createOscillator();
+    var g = a.createGain();
+    o.type = "square";
+    o.frequency.value = accent ? 1600 : 1050;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(accent ? 0.11 : 0.06, t + 0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    o.connect(g);
+    g.connect(a.destination);
+    o.start(t);
+    o.stop(t + 0.07);
+  }
+
+  /* ---------------- keyboard rendering ---------------- */
+
+  var NAMES = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"];
+  var WHITE_PC = [0, 2, 4, 5, 7, 9, 11];
+  var LOW = 48;   /* C3 */
+  var HIGH = 76;  /* E5 */
+
+  function isWhite(m) { return WHITE_PC.indexOf(((m % 12) + 12) % 12) !== -1; }
+
+  function whiteKeys(lo, hi) {
+    var out = [];
+    for (var m = lo; m <= hi; m++) if (isWhite(m)) out.push(m);
+    return out;
+  }
+
+  function drawKeyboard(svg, left, right, opts) {
+    opts = opts || {};
+    var lo = opts.lo || LOW, hi = opts.hi || HIGH;
+    var whites = whiteKeys(lo, hi);
+    var ww = 20, wh = 78, bw = 12, bh = 48, pad = 2;
+    var w = whites.length * ww + pad * 2;
+    var h = wh + pad * 2 + 12;
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    var L = left || [], R = right || [];
+    var parts = [];
+
+    whites.forEach(function (m, i) {
+      var cls = "w" + (L.indexOf(m) > -1 ? " l" : "") + (R.indexOf(m) > -1 ? " r" : "");
+      parts.push('<rect class="' + cls + '" x="' + (pad + i * ww) + '" y="' + pad + '" width="' + ww + '" height="' + wh + '" rx="2"></rect>');
+    });
+
+    for (var m = lo; m <= hi; m++) {
+      if (isWhite(m)) continue;
+      var below = m - 1;
+      var idx = whites.indexOf(below);
+      if (idx === -1) continue;
+      var cls2 = "b" + (L.indexOf(m) > -1 ? " l" : "") + (R.indexOf(m) > -1 ? " r" : "");
+      var x = pad + (idx + 1) * ww - bw / 2;
+      parts.push('<rect class="' + cls2 + '" x="' + x + '" y="' + pad + '" width="' + bw + '" height="' + bh + '" rx="1.5"></rect>');
+    }
+
+    whites.forEach(function (m, i) {
+      if (m % 12 === 0) {
+        parts.push('<text class="lbl" x="' + (pad + i * ww + ww / 2) + '" y="' + (pad + wh + 10) + '" text-anchor="middle">C' + (Math.floor(m / 12) - 1) + "</text>");
+      }
+    });
+
+    svg.innerHTML = parts.join("");
+  }
+
+  function label(midis) {
+    return midis.map(function (m) {
+      return NAMES[((m % 12) + 12) % 12] + (Math.floor(m / 12) - 1);
+    }).join(" ");
+  }
+
+  /* ---------------- chord vocabulary ---------------- */
+  /* l = left hand root, r = right-hand voicing (root omitted where it helps) */
+
+  var C = {
+    "Fm":       { fn: "home · line on F",  l: [53], r: [65, 68, 72] },
+    "Fm(maj7)": { fn: "home · line on E",  l: [53], r: [64, 68, 72] },
+    "Fm7":      { fn: "home · line on E♭", l: [53], r: [63, 68, 72] },
+    "Fm6":      { fn: "home · line on D",  l: [53], r: [62, 68, 72] },
+    "B♭m7":     { fn: "the minor fourth",  l: [58], r: [61, 65, 68] },
+    "E♭7":      { fn: "pulls to A♭",       l: [51], r: [61, 67, 70] },
+    "A♭maj7":   { fn: "the relative major",l: [56], r: [60, 63, 67] },
+    "C7":       { fn: "pulls home",        l: [48], r: [58, 64, 67] },
+    "C7♭9":     { fn: "pulls home, tenser",l: [48], r: [64, 67, 70, 73] },
+    "D♭maj7":   { fn: "the open sky",      l: [49], r: [65, 68, 72] },
+    "G♭maj7":   { fn: "one step further",  l: [54], r: [58, 61, 65] },
+    "A♭7":      { fn: "pulls to D♭",       l: [56], r: [60, 63, 66] },
+    "F7":       { fn: "pulls to B♭m",      l: [53], r: [63, 69, 72] },
+    "B♭m":      { fn: "the line again",    l: [58], r: [61, 65, 70] },
+    "B♭m6":     { fn: "…and again",        l: [58], r: [61, 65, 67] },
+    "Fmaj7":    { fn: "home, but major",   l: [53], r: [69, 72, 76] }
+  };
+
+  function chordCard(name) {
+    var c = C[name];
+    var card = document.createElement("div");
+    card.className = "card";
+
+    var top = document.createElement("div");
+    top.className = "card-top";
+    var nm = document.createElement("div");
+    nm.className = "chordname";
+    nm.textContent = name;
+    var fn = document.createElement("div");
+    fn.className = "fn";
+    fn.textContent = c.fn;
+    top.appendChild(nm);
+    top.appendChild(fn);
+
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "kb");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", name + ": left hand " + label(c.l) + ", right hand " + label(c.r));
+    drawKeyboard(svg, c.l, c.r);
+
+    var hands = document.createElement("div");
+    hands.className = "hands";
+    hands.innerHTML =
+      '<div class="hand"><i class="swatch sw-l"></i><span>' + label(c.l) + "</span></div>" +
+      '<div class="hand"><i class="swatch sw-r"></i><span>' + label(c.r) + "</span></div>";
+
+    var btn = document.createElement("button");
+    btn.textContent = "Play";
+    btn.addEventListener("click", function () { play(c.l.concat(c.r)); });
+
+    card.appendChild(top);
+    card.appendChild(svg);
+    card.appendChild(hands);
+    card.appendChild(btn);
+    return card;
+  }
+
+  function fill(id, names) {
+    var host = document.getElementById(id);
+    names.forEach(function (n) { host.appendChild(chordCard(n)); });
+  }
+
+  fill("grp1", ["Fm", "Fm(maj7)", "Fm7", "Fm6"]);
+  fill("grp2", ["B♭m7", "E♭7", "A♭maj7", "C7"]);
+  fill("grp3", ["D♭maj7", "G♭maj7", "A♭7", "C7♭9", "F7", "B♭m", "B♭m6", "Fmaj7"]);
+
+  /* ---------------- the falling-line demo ---------------- */
+
+  var LINE = ["Fm", "Fm(maj7)", "Fm7", "Fm6"];
+  var LINE_TEXT = [
+    "Thumb on F. The chord is plain F minor — home, and still intact.",
+    "Thumb slides down one key to E. Nothing else has moved, and everything has changed.",
+    "Down again to E♭. The chord is now F minor 7 — softer, more resigned.",
+    "Down once more to D. F minor 6. It sounds unresolved because it is; the next chord has to arrive."
+  ];
+  var lineKb = document.getElementById("lineKb");
+  var lineCap = document.getElementById("lineCaption");
+  var stepHost = document.getElementById("lineSteps");
+  var stepBtns = [];
+  var lineTimer = null;
+
+  function showStep(i, sound) {
+    var c = C[LINE[i]];
+    drawKeyboard(lineKb, c.l, c.r);
+    lineKb.setAttribute("aria-label", LINE[i] + ": left hand " + label(c.l) + ", right hand " + label(c.r));
+    lineCap.textContent = LINE_TEXT[i];
+    stepBtns.forEach(function (b, j) { b.classList.toggle("on", j === i); });
+    if (sound) play(c.l.concat(c.r), 2.4);
+  }
+
+  LINE.forEach(function (name, i) {
+    var b = document.createElement("button");
+    b.className = "step";
+    b.textContent = name;
+    b.addEventListener("click", function () {
+      if (lineTimer) { clearTimeout(lineTimer); lineTimer = null; }
+      showStep(i, true);
+    });
+    stepHost.appendChild(b);
+    stepBtns.push(b);
+  });
+
+  document.getElementById("linePlay").addEventListener("click", function () {
+    if (lineTimer) clearTimeout(lineTimer);
+    var i = 0;
+    (function next() {
+      showStep(i, true);
+      i++;
+      if (i < LINE.length) lineTimer = setTimeout(next, 1700);
+      else lineTimer = null;
+    })();
+  });
+
+  showStep(0, false);
+
+  /* ---------------- the chart ---------------- */
+
+  var STRAINS = [
+    { mark: "A", note: "bars 1–8", bars: ["Fm", "Fm(maj7)", "Fm7", "Fm6", "B♭m7", "E♭7", "A♭maj7", "C7"] },
+    { mark: "A′", note: "bars 9–16", bars: ["Fm", "Fm(maj7)", "Fm7", "Fm6", "B♭m7", "E♭7", "A♭maj7", "C7♭9"] },
+    { mark: "B", note: "the bridge", bars: ["D♭maj7", "G♭maj7", "A♭7", "D♭maj7", "B♭m7", "E♭7", "A♭maj7", "C7♭9"] },
+    { mark: "A″", note: "bars 25–32", bars: ["Fm", "Fm(maj7)", "Fm7", "Fm6", "F7", ["B♭m", "B♭m7", "B♭m6"], "C7", "Fmaj7"] }
+  ];
+
+  var chart = document.getElementById("chart");
+  var barNo = 0;
+
+  STRAINS.forEach(function (s) {
+    var row = document.createElement("div");
+    row.className = "strain";
+
+    var mk = document.createElement("div");
+    mk.className = "strain-mark";
+    mk.innerHTML = s.mark + "<small>" + s.note + "</small>";
+
+    var bars = document.createElement("div");
+    bars.className = "bars";
+
+    s.bars.forEach(function (entry) {
+      barNo++;
+      var names = Array.isArray(entry) ? entry : [entry];
+      var b = document.createElement("button");
+      b.className = "bar";
+      if (names.length > 1) b.classList.add("turn");
+      if (names[0] === "Fmaj7") b.classList.add("home");
+
+      var no = document.createElement("span");
+      no.className = "bar-no";
+      no.textContent = barNo;
+
+      var ch = document.createElement("span");
+      ch.className = "bar-ch";
+      ch.textContent = names[0];
+      if (names.length > 1) {
+        var extra = document.createElement("span");
+        extra.className = "split";
+        extra.textContent = names.slice(1).join("  ");
+        ch.appendChild(extra);
+      }
+
+      b.appendChild(no);
+      b.appendChild(ch);
+      b.addEventListener("click", function () {
+        names.forEach(function (n, i) {
+          var c = C[n];
+          if (c) play(c.l.concat(c.r), names.length > 1 ? 1.0 : 2.4, i * 0.75);
+        });
+      });
+      bars.appendChild(b);
+    });
+
+    row.appendChild(mk);
+    row.appendChild(bars);
+    chart.appendChild(row);
+  });
+
+  /* ---------------- metronome ---------------- */
+
+  var metroBtn = document.getElementById("metroBtn");
+  var bpmIn = document.getElementById("bpm");
+  var bpmOut = document.getElementById("bpmOut");
+  var beatEls = Array.prototype.slice.call(document.querySelectorAll("#beats .beat"));
+  var timer = null;
+  var beat = 0;
+
+  function stopMetro() {
+    if (timer) clearInterval(timer);
+    timer = null;
+    metroBtn.setAttribute("aria-pressed", "false");
+    beatEls.forEach(function (e) { e.classList.remove("on"); });
+  }
+
+  function startMetro() {
+    stopMetro();
+    beat = 0;
+    metroBtn.setAttribute("aria-pressed", "true");
+    var tick = function () {
+      click(beat === 0);
+      beatEls.forEach(function (e, i) { e.classList.toggle("on", i === beat); });
+      beat = (beat + 1) % 4;
+    };
+    tick();
+    timer = setInterval(tick, 60000 / Number(bpmIn.value));
+  }
+
+  metroBtn.addEventListener("click", function () {
+    if (timer) stopMetro(); else startMetro();
+  });
+
+  bpmIn.addEventListener("input", function () {
+    bpmOut.textContent = bpmIn.value;
+    if (timer) startMetro();
+  });
+})();
+</script>
