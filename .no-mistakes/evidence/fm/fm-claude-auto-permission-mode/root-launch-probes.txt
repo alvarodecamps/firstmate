@@ -1,0 +1,27 @@
+Live probes on this host (uid 0, Claude Code 2.1.235), run by the test phase.
+
+1) The old flag is refused under root with a clean env (the bug being fixed):
+
+$ env -i HOME=/root PATH="$PATH" claude --dangerously-skip-permissions -p 'reply with the single word OK' --model claude-haiku-4-5-20251001
+--dangerously-skip-permissions cannot be used with root/sudo privileges for security reasons
+
+Note: the refusal did NOT fire while the ambient session env carried the
+IS_SANDBOX=1 marker (the undocumented workaround upstream PR 2455 held);
+fleet launch panes do not have that marker, and the refusal reproduced with
+it removed. This matches the record in docs/verification/claude.md (2.1.234).
+
+2) The new flag is accepted as root and the session runs:
+
+$ env -u IS_SANDBOX ... claude --permission-mode auto -p 'reply with the single word OK' --model claude-fable-5
+OK   (exit 0)
+
+3) The classifier rule lists are queryable, as the harness-adapters skill
+states: `claude auto-mode defaults` prints the allow/block JSON.
+
+4) The exact command the fleet types into a pane, pinned by
+tests/fm-spawn-dispatch-profile.test.sh (canonical no-profile launch):
+
+env -u CURSOR_AGENT -u CURSOR_INVOKED_AS CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION=false claude --permission-mode auto "$(<fm-operational-input.sh> encode launch-brief < brief.md)"
+
+and with profile model/effort threading:
+claude --permission-mode auto --model 'sonnet' --effort 'high'
