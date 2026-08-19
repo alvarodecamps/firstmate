@@ -1,0 +1,4 @@
+$ cd /tmp/fm-retention-repro/base   # pristine base commit 03bb1d8 + ONLY the new test file
+$ bash tests/retention-only.test.sh   # test_resolved_decisions_survive_done_pruning_before_the_completion_gate
+not ok - the completion gate lost resolved decisions to ordinary Done pruning: fm-decision-hold: captain decision sample-retention-review-decision-choice-01 is absent from /tmp/fm-decision-hold.iSKJ2G/retention-prune/data/backlog.md
+exit=1

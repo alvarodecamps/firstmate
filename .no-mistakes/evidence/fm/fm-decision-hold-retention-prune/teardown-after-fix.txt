@@ -1,0 +1,85 @@
+### firstmate tree under test: /root/.no-mistakes/worktrees/5f0e0f184814/01M0C4QM5S5QTJXKAGVRXFF4F5
+
+=== Backlog retention config the captain actually ships (.tasks.toml)
+backend = "markdown"
+
+[markdown]
+path = "data/backlog.md"
+archive = "data/done-archive.md"
+done_keep = 10
+
+=== Scout registers 12 captain decisions (more than done_keep = 10)
+sample-retention-review-decision-choice-01
+sample-retention-review-decision-choice-02
+sample-retention-review-decision-choice-03
+sample-retention-review-decision-choice-04
+sample-retention-review-decision-choice-05
+sample-retention-review-decision-choice-06
+sample-retention-review-decision-choice-07
+sample-retention-review-decision-choice-08
+sample-retention-review-decision-choice-09
+sample-retention-review-decision-choice-10
+sample-retention-review-decision-choice-11
+sample-retention-review-decision-choice-12
+
+=== Scout records its decision inventory, then verifies it while every hold is open
+complete: sample-retention-review decision inventory reviewed (choice-01,choice-02,choice-03,choice-04,choice-05,choice-06,choice-07,choice-08,choice-09,choice-10,choice-11,choice-12)
+verified: sample-retention-review unresolved-decision inventory
+
+=== Captain answers all 12 (choice-01 routes follow-up work, choice-02 is declined)
+resolved: sample-retention-review-decision-choice-01 -> sample-retention-work
+declined: sample-retention-review-decision-choice-02
+answered: sample-retention-review-decision-choice-03
+answered: sample-retention-review-decision-choice-04
+answered: sample-retention-review-decision-choice-05
+answered: sample-retention-review-decision-choice-06
+answered: sample-retention-review-decision-choice-07
+answered: sample-retention-review-decision-choice-08
+answered: sample-retention-review-decision-choice-09
+answered: sample-retention-review-decision-choice-10
+answered: sample-retention-review-decision-choice-11
+answered: sample-retention-review-decision-choice-12
+
+=== Firstmate closes the scout in the backlog
+
+=== Live backlog Done section after ordinary tasks-axi pruning (done_keep = 10)
+- [x] sample-retention-review - Investigate sample retention data/sample-retention-review/report.md
+- [x] sample-retention-review-decision-choice-12 - Choose sample option 12
+- [x] sample-retention-review-decision-choice-11 - Choose sample option 11
+- [x] sample-retention-review-decision-choice-10 - Choose sample option 10
+- [x] sample-retention-review-decision-choice-09 - Choose sample option 09
+- [x] sample-retention-review-decision-choice-08 - Choose sample option 08
+- [x] sample-retention-review-decision-choice-07 - Choose sample option 07
+- [x] sample-retention-review-decision-choice-06 - Choose sample option 06
+- [x] sample-retention-review-decision-choice-05 - Choose sample option 05
+- [x] sample-retention-review-decision-choice-04 - Choose sample option 04
+
+=== Resolved decisions tasks-axi moved into data/done-archive.md
+- [x] sample-retention-review-decision-choice-01 - Choose sample option 01
+- [x] sample-retention-review-decision-choice-02 - Choose sample option 02
+- [x] sample-retention-review-decision-choice-03 - Choose sample option 03
+
+=== Captain decision text is intact in the archive (choice-01)
+10:  Use sample option 01.
+
+=== Completion gate: fm-decision-hold.sh verify sample-retention-review
+verified: sample-retention-review unresolved-decision inventory
+verify exit=0
+
+=== Teardown the captain runs next: bin/fm-teardown.sh sample-retention-review
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+●  WATCHER DOWN - SUPERVISION IS OFF
+●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+●  This is a supervision warning only; the guarded operation WILL still run.
+●  watcher supervision needs Stop-owned automatic recovery; inspect the hook registration and startup status before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+teardown sample-retention-review complete (window firstmate:fm-sample-retention-review, worktree /tmp/fm-retention-after-fix.dD3Jk7/projects/missing-sample-retention-review)
+Backlog: sample-retention-review just finished. Run tasks-axi done sample-retention-review --report data/sample-retention-review/report.md, then run tasks-axi ready for dependency-cleared candidates, check date gates, and dispatch only work whose blockers are gone and date is due.
+teardown exit=0
+
+=== Result for the captain
+teardown COMPLETED; scout state cleared: yes (state/sample-retention-review.meta removed)
+
+=== Archive is unchanged by the gate read (never rewritten)
+done-archive.md sha256 82c99995cd2894124f83fb222fb5e1cbca0da67af22920c591953d4c212e21a4

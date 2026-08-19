@@ -1,0 +1,31 @@
+### firstmate tree under test: /root/.no-mistakes/worktrees/5f0e0f184814/01M0C4QM5S5QTJXKAGVRXFF4F5
+
+=== One captain decision is inventoried, then closed OUTSIDE fm-decision-hold
+sample-archived-gap-review-decision-gap
+complete: sample-archived-gap-review decision inventory reviewed (gap)
+
+=== Ten later closes prune that record out of the live backlog
+the unanswered close now lives only in data/done-archive.md
+resolution records in the archive: 0
+
+=== Completion gate: fm-decision-hold.sh verify sample-archived-gap-review
+fm-decision-hold: captain decision sample-archived-gap-review-decision-gap is archived in /tmp/fm-retention-refusal.jvGqKd/data/done-archive.md without a recorded captain decision
+verify exit=1
+
+=== Teardown the captain runs next: bin/fm-teardown.sh sample-archived-gap-review
+fm-decision-hold: captain decision sample-archived-gap-review-decision-gap is archived in /tmp/fm-retention-refusal.jvGqKd/data/done-archive.md without a recorded captain decision
+REFUSED: scout task sample-archived-gap-review has not passed the unresolved-decision completion gate.
+Inventory its report and any visual review through bin/fm-decision-hold.sh before teardown.
+teardown exit=1
+scout state preserved: yes (state/sample-archived-gap-review.meta kept)
+scout report preserved: yes
+
+=== No close path can invent the missing captain answer after the fact
+repair -> exit=1: fm-decision-hold: captain hold sample-archived-gap-review-decision-gap was closed outside fm-decision-hold and archived in /tmp/fm-retention-refusal.jvGqKd/data/done-archive.md without a recorded captain decision; repair reaches only live records in /tmp/fm-retention-refusal.jvGqKd/data/backlog.md
+answer -> exit=1: fm-decision-hold: captain hold sample-archived-gap-review-decision-gap was closed outside fm-decision-hold and archived in /tmp/fm-retention-refusal.jvGqKd/data/done-archive.md without a recorded captain decision; repair reaches only live records in /tmp/fm-retention-refusal.jvGqKd/data/backlog.md
+decline -> exit=1: fm-decision-hold: captain hold sample-archived-gap-review-decision-gap was closed outside fm-decision-hold and archived in /tmp/fm-retention-refusal.jvGqKd/data/done-archive.md without a recorded captain decision; repair reaches only live records in /tmp/fm-retention-refusal.jvGqKd/data/backlog.md
+hold (reopen) -> exit=1: fm-decision-hold: captain decision sample-archived-gap-review-decision-gap is closed and archived in /tmp/fm-retention-refusal.jvGqKd/data/done-archive.md; use a new decision key for a new decision
+
+=== Nothing wrote a resolution record anywhere
+done-archive.md unchanged (sha256 a2008ef9b44d8c1f6ba7569552b93c929de08ebe621b35480889d280656a4482)
+resolution records in the live backlog: 0
