@@ -1,0 +1,37 @@
+firstmate decision-hold retention - the captain-facing before/after
+
+Both runs use the tracked backlog config unchanged: done_keep = 10.
+Nothing raises or overrides it, and no private tasks-axi config is used.
+The only difference between the runs is bin/fm-decision-hold.sh
+(base f242264 vs b248f76). The driver is repro-decision-hold-retention.sh.
+
+SCENARIO A - 12 captain decisions answered (routed + declined + answered),
+             then the scout is closed. Ordinary Done pruning has already moved
+             the 3 oldest resolved records into data/done-archive.md.
+
+  step                                  BEFORE                    AFTER
+  ------------------------------------  ------------------------  ----------------------
+  resolved records live / archived      9 / 3                     9 / 3
+  fm-decision-hold.sh verify <scout>    exit 1, "is absent from   exit 0, "verified:
+                                        .../data/backlog.md"      ... inventory"
+  bin/fm-teardown.sh <scout>            REFUSED, exit 1           complete, exit 0
+                                        (this is the incident)
+  origin state/<id>.meta afterwards     still present (blocked)   removed (torn down)
+  archived records still in the file    3 of 12 (never deleted)   3 of 12 (never deleted)
+  done-archive.md sha256 around the     82c99995cd289412...       82c99995cd289412...
+  gate run                              unchanged                 unchanged
+
+SCENARIO B - control, the gate must NOT get weaker: one hold is closed directly
+             with tasks-axi (outside fm-decision-hold, so no captain decision was
+             ever recorded) and 10 later closes prune it into the archive.
+
+  step                                  BEFORE                    AFTER
+  ------------------------------------  ------------------------  ----------------------
+  bin/fm-teardown.sh <scout>            REFUSED, exit 1           REFUSED, exit 1
+  refusal reason                        "is absent from           "is archived in
+                                        .../data/backlog.md"      .../done-archive.md
+                                                                  without a recorded
+                                                                  captain decision"
+  origin state/<id>.meta afterwards     still present             still present
+
+Full transcripts: teardown-before-fix.txt, teardown-after-fix.txt

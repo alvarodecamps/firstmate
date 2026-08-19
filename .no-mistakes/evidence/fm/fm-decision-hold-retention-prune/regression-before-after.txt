@@ -1,0 +1,55 @@
+Regression coverage: tests/fm-decision-hold-lifecycle.test.sh (7 new cases)
+
+Method: the only production file the change touches (bin/fm-decision-hold.sh) was
+swapped to its merge-base version (f242264) and each new case was run against it,
+then restored. Test code was identical in both runs.
+
+BEFORE the fix (base bin/fm-decision-hold.sh) - every new case fails:
+
+  test_resolved_decisions_survive_done_pruning_before_the_completion_gate
+    not ok - the completion gate lost resolved decisions to ordinary Done pruning:
+             fm-decision-hold: captain decision sample-retention-review-decision-choice-01
+             is absent from .../data/backlog.md
+  test_resolve_retry_survives_a_routed_task_pruned_after_routing
+    not ok - the exact resolve retry failed after its routed work was pruned:
+             fm-decision-hold: routed task sample-routed-prune-work does not exist in the active home
+  test_archived_out_of_band_close_still_blocks_the_gate
+    not ok - verification must say the archived record has no recorded captain decision
+  test_archived_decision_verifies_under_a_relative_tmpdir
+    not ok - an archived resolved decision failed to verify under a relative TMPDIR:
+             fm-decision-hold: captain decision ...-decision-choice is absent from .../data/backlog.md
+  test_unrecognized_archive_heading_never_reads_as_an_absent_decision
+    not ok - the archived fixture did not verify before its heading was mangled
+  test_unreadable_archive_is_not_reported_as_a_foreign_origin
+    not ok - a readable archive did not answer for the origin's ownership
+             (fm-decision-hold: origin ... is not owned by the active home ...)
+  test_a_killed_archive_lookup_leaves_no_view_behind
+    not ok - the archived lookup never reached its staged view
+
+AFTER the fix (b248f76) - full file, 23/23:
+
+ok - report-only unresolved decision is reproduced and completion refuses before loss
+ok - non-forced scout teardown always requires durable inventory verification
+ok - a declined decision closes with a recorded answer and no routed work
+ok - a decision closed outside the script is repairable and then clears teardown
+ok - an unanswered decision still blocks completion and resists both unrouted close paths
+ok - captain holds are idempotent, distinct, teardown-safe, Bearings-visible, and durably routed before close
+ok - completion and verification validate origins before constructing paths
+ok - ended visual review follows the same decision-hold completion owner
+ok - resolved findings and decision-like prose do not create false holds
+ok - terminal single-owner stale status decisions do not block empty inventory
+ok - main-home and secondmate-home captain holds remain correctly routed
+ok - resolve matches first/middle/last in quoted blocked_by and rejects a genuinely absent id
+ok - a bound channel's captured answers close their captain holds at answer time
+ok - a channel source with no decision binding closes nothing
+ok - the answer path keeps every guard the unrouted close path already had
+ok - the chat channel feeds the same keyed-answer intake a captured review does
+ok - resolved decisions survive ordinary Done pruning for the completion gate
+ok - a resolve retry survives routed work that Done pruning archived after routing
+ok - an archived record without a recorded captain decision still blocks the gate
+ok - an archived resolved decision verifies under a relative TMPDIR
+ok - an unreadable done archive is never read as an absent decision
+ok - an unreadable archive is reported as a read fault, not as a foreign origin
+ok - a killed archive lookup leaves no read-only view behind
+
+tests/fm-teardown.test.sh (the completion gate's own suite): 58 ok, 0 not ok.

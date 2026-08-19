@@ -1,86 +1,92 @@
-### firstmate tree under test: /tmp/fm-retention-repro/base
+################  firstmate decision-hold retention  ################
+label            : before-fix
+repo under test  : /root/.no-mistakes/worktrees/5f0e0f184814/01M0DY22SBCT44BMV2H441APEM
+fm-decision-hold : sha256 cf38f7a091deeee0
+script version   : BEFORE the fix (base f242264 bin/fm-decision-hold.sh)
 
-=== Backlog retention config the captain actually ships (.tasks.toml)
-backend = "markdown"
+=== SCENARIO A - twelve answered captain decisions, then scout teardown ===
+$ cat .tasks.toml   # the tracked backlog retention config, unmodified
+    backend = "markdown"
+    
+    [markdown]
+    path = "data/backlog.md"
+    archive = "data/done-archive.md"
+    done_keep = 10
 
-[markdown]
-path = "data/backlog.md"
-archive = "data/done-archive.md"
-done_keep = 10
+-- register twelve captain decisions and inventory them --
+$ fm-decision-hold.sh complete sample-retention-review choice-01 .. choice-12
+    complete: sample-retention-review decision inventory reviewed (choice-01,choice-02,choice-03,choice-04,choice-05,choice-06,choice-07,choice-08,choice-09,choice-10,choice-11,choice-12)
 
-=== Scout registers 12 captain decisions (more than done_keep = 10)
-sample-retention-review-decision-choice-01
-sample-retention-review-decision-choice-02
-sample-retention-review-decision-choice-03
-sample-retention-review-decision-choice-04
-sample-retention-review-decision-choice-05
-sample-retention-review-decision-choice-06
-sample-retention-review-decision-choice-07
-sample-retention-review-decision-choice-08
-sample-retention-review-decision-choice-09
-sample-retention-review-decision-choice-10
-sample-retention-review-decision-choice-11
-sample-retention-review-decision-choice-12
+-- the captain answers all twelve (routed, declined, answered) --
+$ fm-decision-hold.sh resolve sample-retention-review choice-01 --routed-to sample-retention-work
+    resolved: sample-retention-review-decision-choice-01 -> sample-retention-work
+$ fm-decision-hold.sh decline sample-retention-review choice-02
+    declined: sample-retention-review-decision-choice-02
+    answered: sample-retention-review-decision-choice-03
+    answered: sample-retention-review-decision-choice-04
+    answered: sample-retention-review-decision-choice-05
+    answered: sample-retention-review-decision-choice-06
+    answered: sample-retention-review-decision-choice-07
+    answered: sample-retention-review-decision-choice-08
+    answered: sample-retention-review-decision-choice-09
+    answered: sample-retention-review-decision-choice-10
+    answered: sample-retention-review-decision-choice-11
+    answered: sample-retention-review-decision-choice-12
 
-=== Scout records its decision inventory, then verifies it while every hold is open
-complete: sample-retention-review decision inventory reviewed (choice-01,choice-02,choice-03,choice-04,choice-05,choice-06,choice-07,choice-08,choice-09,choice-10,choice-11,choice-12)
-verified: sample-retention-review unresolved-decision inventory
+-- firstmate closes the scout in the backlog --
+$ tasks-axi done sample-retention-review --report data/sample-retention-review/report.md
 
-=== Captain answers all 12 (choice-01 routes follow-up work, choice-02 is declined)
-resolved: sample-retention-review-decision-choice-01 -> sample-retention-work
-declined: sample-retention-review-decision-choice-02
-answered: sample-retention-review-decision-choice-03
-answered: sample-retention-review-decision-choice-04
-answered: sample-retention-review-decision-choice-05
-answered: sample-retention-review-decision-choice-06
-answered: sample-retention-review-decision-choice-07
-answered: sample-retention-review-decision-choice-08
-answered: sample-retention-review-decision-choice-09
-answered: sample-retention-review-decision-choice-10
-answered: sample-retention-review-decision-choice-11
-answered: sample-retention-review-decision-choice-12
+=== where the twelve resolved decision records now live (done_keep = 10) ===
+$ grep -c 'decision-choice' data/backlog.md   # live backlog
+    9 of 12 still live
+$ grep -c 'decision-choice' data/done-archive.md   # done archive
+    3 of 12 archived by ordinary Done pruning
+$ grep 'decision-choice' data/done-archive.md
+    - [x] sample-retention-review-decision-choice-01 - Choose sample option 01 (repo: sample) (kind: captain) (done 2026-08-19) (hold: captain choice 01 pending) (hold-kind: captain)
+    - [x] sample-retention-review-decision-choice-02 - Choose sample option 02 (repo: sample) (kind: captain) (done 2026-08-19) (hold: captain choice 02 pending) (hold-kind: captain)
+    - [x] sample-retention-review-decision-choice-03 - Choose sample option 03 (repo: sample) (kind: captain) (done 2026-08-19) (hold: captain choice 03 pending) (hold-kind: captain)
 
-=== Firstmate closes the scout in the backlog
+=== the captain-facing gate: fm-decision-hold.sh verify ===
+$ fm-decision-hold.sh verify sample-retention-review
+    fm-decision-hold: captain decision sample-retention-review-decision-choice-01 is absent from /tmp/fm-retention-repro.K8XQea/retention/data/backlog.md
+    exit=1
 
-=== Live backlog Done section after ordinary tasks-axi pruning (done_keep = 10)
-- [x] sample-retention-review - Investigate sample retention data/sample-retention-review/report.md
-- [x] sample-retention-review-decision-choice-12 - Choose sample option 12
-- [x] sample-retention-review-decision-choice-11 - Choose sample option 11
-- [x] sample-retention-review-decision-choice-10 - Choose sample option 10
-- [x] sample-retention-review-decision-choice-09 - Choose sample option 09
-- [x] sample-retention-review-decision-choice-08 - Choose sample option 08
-- [x] sample-retention-review-decision-choice-07 - Choose sample option 07
-- [x] sample-retention-review-decision-choice-06 - Choose sample option 06
-- [x] sample-retention-review-decision-choice-05 - Choose sample option 05
-- [x] sample-retention-review-decision-choice-04 - Choose sample option 04
+=== the captain-facing gate: bin/fm-teardown.sh ===
+$ fm-teardown.sh sample-retention-review
+    ●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ●  WATCHER DOWN - SUPERVISION IS OFF
+    ●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+    ●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+    ●  This is a supervision warning only; the guarded operation WILL still run.
+    ●  watcher supervision needs Stop-owned automatic recovery; inspect the hook registration and startup status before ending the turn.
+    ●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    fm-decision-hold: captain decision sample-retention-review-decision-choice-01 is absent from /tmp/fm-retention-repro.K8XQea/retention/data/backlog.md
+    REFUSED: scout task sample-retention-review has not passed the unresolved-decision completion gate.
+    Inventory its report and any visual review through bin/fm-decision-hold.sh before teardown.
+    exit=1
+SCENARIO A RESULT: teardown REFUSED the fully answered scout (the incident).
+origin metadata after teardown: still present (teardown blocked)
+archived decision records still present: 3 of 12 (never deleted)
+done-archive.md sha256 before the gate ran : 82c99995cd2894124f83fb222fb5e1cbca0da67af22920c591953d4c212e21a4
+done-archive.md sha256 after  the gate ran : 82c99995cd2894124f83fb222fb5e1cbca0da67af22920c591953d4c212e21a4
+the gate read the archive without writing it: yes
 
-=== Resolved decisions tasks-axi moved into data/done-archive.md
-- [x] sample-retention-review-decision-choice-01 - Choose sample option 01
-- [x] sample-retention-review-decision-choice-02 - Choose sample option 02
-- [x] sample-retention-review-decision-choice-03 - Choose sample option 03
+=== SCENARIO B - control: a hold closed OUTSIDE fm-decision-hold, then archived ===
+$ tasks-axi done sample-archived-gap-review-decision-gap    # closed outside fm-decision-hold: nothing was decided
+the unanswered hold is now archived, not live: live=0 archived=1
+$ fm-teardown.sh sample-archived-gap-review
+    ●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ●  WATCHER DOWN - SUPERVISION IS OFF
+    ●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
+    ●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
+    ●  This is a supervision warning only; the guarded operation WILL still run.
+    ●  watcher supervision needs Stop-owned automatic recovery; inspect the hook registration and startup status before ending the turn.
+    ●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    fm-decision-hold: captain decision sample-archived-gap-review-decision-gap is absent from /tmp/fm-retention-repro.K8XQea/outofband/data/backlog.md
+    REFUSED: scout task sample-archived-gap-review has not passed the unresolved-decision completion gate.
+    Inventory its report and any visual review through bin/fm-decision-hold.sh before teardown.
+    exit=1
+SCENARIO B RESULT: teardown REFUSED unverified work - the gate holds.
+origin metadata after teardown: still present (teardown blocked)
 
-=== Captain decision text is intact in the archive (choice-01)
-10:  Use sample option 01.
-
-=== Completion gate: fm-decision-hold.sh verify sample-retention-review
-fm-decision-hold: captain decision sample-retention-review-decision-choice-01 is absent from /tmp/fm-retention-before-fix.yOPpU1/data/backlog.md
-verify exit=1
-
-=== Teardown the captain runs next: bin/fm-teardown.sh sample-retention-review
-●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-●  WATCHER DOWN - SUPERVISION IS OFF
-●  1 task(s) in flight, but no watcher has a fresh beacon (last beat: never, grace 300s).
-●  Trust the emitted supervision protocol for this harness; do not use shell & for watcher repair.
-●  This is a supervision warning only; the guarded operation WILL still run.
-●  watcher supervision needs Stop-owned automatic recovery; inspect the hook registration and startup status before ending the turn.
-●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-fm-decision-hold: captain decision sample-retention-review-decision-choice-01 is absent from /tmp/fm-retention-before-fix.yOPpU1/data/backlog.md
-REFUSED: scout task sample-retention-review has not passed the unresolved-decision completion gate.
-Inventory its report and any visual review through bin/fm-decision-hold.sh before teardown.
-teardown exit=1
-
-=== Result for the captain
-teardown REFUSED; scout state preserved: yes (state/sample-retention-review.meta kept)
-
-=== Archive is unchanged by the gate read (never rewritten)
-done-archive.md sha256 82c99995cd2894124f83fb222fb5e1cbca0da67af22920c591953d4c212e21a4
+################  end before-fix  ################
